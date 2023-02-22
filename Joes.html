@@ -52,8 +52,8 @@
   
 <div class="container text-left">    
     <br>
+
     <p id="menuHeader">Menu</p>
-    
     <div class="row">
         <div class="col-sm-3">
             <div class="well">
@@ -125,7 +125,6 @@
                         </tr>
                     </table>
                     <br>
-                      <!-- Totals -->                  
                     <p id="subtotal">Subtotal: $0.00</p>
                     <p id="discount">Discount: $0.00</p>
                     <p id="tax">Tax: $0.00</p>
@@ -165,7 +164,9 @@
         4: 0
     }
 
-    function addItem(){        
+
+    function addItem(){
+        
         // Get item number
         var itemNumber = Number(prompt("Please enter item number:", 1));
         while (Number.isInteger(itemNumber) == false || itemNumber < 1 || itemNumber > 4) {
@@ -246,9 +247,9 @@
         document.getElementById("subtotal").innerHTML = "Subtotal: $" + subtotal.toFixed(2);
         var discount = 0;
         if(subtotal > 20){
-            discount = subtotal * 0.10;
-            document.getElementById("discount").innerHTML = "Discount: $" + discount.toFixed(2);
+            discount = subtotal * 0.10;   
         }
+        document.getElementById("discount").innerHTML = "Discount: $" + discount.toFixed(2);
 
         // Calculate and display tax
         var tax = 0;
