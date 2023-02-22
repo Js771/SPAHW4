@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Joe's Hotdogs</title>
+    <!-- Web page adapted from Bootstrap theme made by www.w3schools.com -->
+    <!-- https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_temp_social&stacked=h -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>    
+        #navbar-header{
+            height: 55px;
+        }
+        #navbar-brand{
+            font-size: 30px;
+            color: white;
+        }
+        .submitButton{
+            margin: 10px;
+            height: 40px;
+            width: 100px;
+        }
+        #menuHeader{
+            font-size: 40px;
+        }
+        #cartHeader{
+            font-size: 25px;
+        }
+        .order{
+            text-align: center;
+        }
+        footer {
+        background-color: #555;
+        color: white;
+        padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div id="navbar-header">
+            <a id="navbar-brand" href="#">Joe's Hotdogs</a>
+            <!-- Image from: https://cdn.pixabay.com/photo/2017/06/17/18/44/bun-2413144__480.png -->
+            <img src="./docs/assets/images/bun.png" class="img-rounded" height="50" width="50" alt="Hotdog Bun">
+        </div>
+    </div>
+</nav>
+  
+<div class="container text-left">    
+    <br>
+    <p id="menuHeader">Menu</p>
+    
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="well">
+                <p>1. Hotdog ($4.00 each)</p>
+                <!-- Image from: https://images.unsplash.com/photo-1541214113241-21578d2d9b62?ixlib -->
+                <img src="./docs/assets/images/hotdog.jpg" class="img-rounded" height="85" width="95" alt="Hotdog">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="well">
+                <p>2. Fries ($3.50 each)</p>
+                <!-- Image from: https://images.unsplash.com/photo-1573080496219-bb080dd4f877?ixlib -->
+                <img src="./docs/assets/images/fries.jpg" class="img-rounded" height="85" width="95" alt="Fries">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="well">
+                <p>3. Soda ($1.50 each)</p>
+                <!-- Image from: https://images.unsplash.com/photo-1517959105821-eaf2591984ca?ixlib -->
+                <img src="./docs/assets/images/soda.jpg" class="img-rounded" height="85" width="85" alt="Soda">
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="well">
+                <p>4. Sauerkraut ($1.00 each)</p>
+                <!-- Image from: https://pixabay.com/photos/sauerkraut-caraway-seed-2989396/ -->
+                <img src="./docs/assets/images/sauerkraut.jpg" class="img-rounded" height="85" width="105" alt="Sauerkraut">
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <button class="submitButton" onclick="addItem()">Add Item</button>
+                <button class="submitButton" onclick="toggleCart()">Show Cart</button>
+                <button class="submitButton" onclick="checkout()">Checkout</button>
+                <br>
+            </div>
+        </div>
+
+      <div id="cart">
+            <div class="panel panel-default text-left">
+                <div class="panel-body">
+                    <p id="cartHeader">Cart</p>          
+                    <br>
+                    <!-- Table of ordered items -->
+                    <table>
+                        <tr>
+                            <th>Item</th>
+                            <th class="order">Ordered</th>
+                        </tr>
+                        <tr>
+                            <td>Hotdog</td>
+                            <td class="order" id="1">0</td>
+                        </tr>
+                        <tr>
+                            <td>Fries</td>
+                            <td class="order" id="2">0</td>
+                        </tr>
+                        <tr>
+                            <td>Soda</td>
+                            <td class="order" id="3">0</td>
+                        </tr>
+                        <tr>
+                            <td>Sauerkraut</td>
+                            <td class="order" id="4">0</td>
+                        </tr>
+                    </table>
+                    <br>
+                      <!-- Totals -->                  
+                    <p id="subtotal">Subtotal: $0.00</p>
+                    <p id="discount">Discount: $0.00</p>
+                    <p id="tax">Tax: $0.00</p>
+                    <p id="total">Total: $0.00</p>  
+                    <br>
+                </div>
+            </div>
+        </div>
+</div> 
+
+<script>
+    // Hide the cart on startup
+    var cart = document.getElementById("cart");
+    cart.style.display = "none";
+
+    // Cost by item number
+    const cost = {
+        1: 4,
+        2: 3.50,
+        3: 1.50,
+        4: 1
+    }
+
+    // Name by item number
+    const itemName = {
+        1: "Hotdog",
+        2: "Fries",
+        3: "Soda",
+        4: "Sauerkraut"
+    }
+
+    // Object for customer purchases
+    var purchases = {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0
+    }
+
+    function addItem(){        
+        // Get item number
+        var itemNumber = Number(prompt("Please enter item number:", 1));
+        while (Number.isInteger(itemNumber) == false || itemNumber < 1 || itemNumber > 4) {
+            console.log(itemNumber)
+            if(itemNumber===0){
+                break;
+            }
+            itemNumber = Number(prompt("Please enter an item number between 1 and 4"));
+        } 
+
+        // Get quantity
+        if (itemNumber !=0){
+            var quantity = Number(prompt("Please enter quantity:", "1"));
+            while (Number.isInteger(quantity) == false || quantity < 0) {
+                if(quantity===0){
+                    break;
+                }
+                quantity = Number(prompt("Please enter a positive whole number:"));
+            }
+
+            // Show item added to cart as per professor's video
+            if(quantity > 1 && itemNumber != 2){
+                alert("Adding "+ quantity + " "+ itemName[itemNumber] + "s");
+            }
+            else{
+                alert("Adding "+ quantity + " "+ itemName[itemNumber]);
+            }
+            
+            // Get existing number of purchases
+            basePurchases=purchases[itemNumber];
+
+            // Update number of purchases
+            purchases[itemNumber]=basePurchases+quantity;
+
+            // Update purchased value shown in cart
+            document.getElementById(itemNumber).innerHTML = purchases[itemNumber];
+
+            calculateTotals();
+        } 
+    } // end add item
+
+
+    // Toggle cart visibility
+    // Toggle visibility from: https://www.w3schools.com/howto/howto_js_toggle_hide_show.asp
+    function toggleCart() {
+        if(cart.style.display === "none"){
+            cart.style.display = "block";
+        } else {
+            cart.style.display = "none";
+        }
+    } // End toggle cart
+
+
+    function checkout(){
+
+        // Reset purchases
+        for(let i = 1; i < 5; i++){
+            purchases[i] = 0;
+            document.getElementById(i).innerHTML = 0;
+        }
+
+        calculateTotals();
+
+        alert("Thank you for your order!");
+    }
+
+    function calculateTotals(){
+
+        // Calculate the subtotal
+        var subtotal = 0;
+        for(let i = 1; i < 5; i++){
+            subtotal = subtotal + purchases[i] * cost[i];
+        }
+
+        // Calculate and display before tax discount of 10% for orders over $20
+        // Show number with two decimal places from: 
+        // https://www.tutorialspoint.com/How-to-format-a-number-with-two-decimals-in-JavaScript
+        document.getElementById("subtotal").innerHTML = "Subtotal: $" + subtotal.toFixed(2);
+        var discount = 0;
+        if(subtotal > 20){
+            discount = subtotal * 0.10;
+            document.getElementById("discount").innerHTML = "Discount: $" + discount.toFixed(2);
+        }
+
+        // Calculate and display tax
+        var tax = 0;
+        tax = (subtotal - discount) * 0.0625;
+        document.getElementById("tax").innerHTML = "Tax: $" + tax.toFixed(2);
+
+        // Calculate and display total
+        var total = 0;
+        total = subtotal - discount + tax;
+        document.getElementById("total").innerHTML = "Total: $" + total.toFixed(2);
+    } // end calculate totals
+</script>
+
+<footer class="container-fluid text-center">
+</footer>
+
+</body>
+</html>
